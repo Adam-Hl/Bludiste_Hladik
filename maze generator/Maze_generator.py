@@ -72,7 +72,7 @@ class App:
         print(f"\nGenerating maze with size {self.y}x{self.x}...")
         generator = Maze_generator((self.y, self.x))
         maze = generator.create_maze()
-        print(f"Random maze: \n{maze}")
+        print(maze)
         choice = input("Do you want to save this maze? (y/n)\n>")
         if choice == "y":
             np.save('generated_temp.npy', maze)
