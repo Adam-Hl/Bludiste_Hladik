@@ -30,7 +30,7 @@ class FloodFill:
         values = [int(x) for x in list if x != np.inf]
         return values
 
-    def flood(self, position=None):
+    def flood(self, solver):
         # creates queue and adds finish to it
         queue = deque([self.finish])
         # replaces finish with 1
@@ -53,3 +53,9 @@ class FloodFill:
                         self.transformed[new_y, new_x] = current_value + 1
                         # add the new position to the queue for further exploration in next iteration
                         queue.append((new_y, new_x))
+
+                        # sets can_be_solved to true if the maze can be solved
+                        if (new_y, new_x) == self.start:
+                            self.can_be_solved = True
+
+            self.can_be_solved = False

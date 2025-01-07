@@ -13,7 +13,7 @@ class Maze:
         self.finish = None
         self.get_info()
         self.alg = FloodFill(self.maze)
-        self.alg.flood()
+        self.alg.flood(False)
         self.transformed = self.alg.transformed
         print(f"Flooded maze:\n{self.transformed}")
         self.alg_values = self.alg.get_values()

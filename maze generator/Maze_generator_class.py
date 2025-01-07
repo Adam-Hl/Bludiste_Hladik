@@ -1,5 +1,6 @@
 import numpy as np
 from random import randint
+from classes.flood_fill_algorithm import FloodFill
 
 
 class Maze_generator:
@@ -9,57 +10,44 @@ class Maze_generator:
         self.file = None
 
     def create_maze(self):
-        # maze = [[randint(0, 9) for cell in range(self.x)] for row in range(self.y)]
+        maze = np.zeros((self.y, self.x), dtype=int)
+        maze = self.place_start(maze)
+        maze = self.place_end(maze)
+        flood_fill = FloodFill(maze)
+        while flood_fill.can_be_solved:
+            self.place_wall(maze)
+            flood_fill.flood(True)
+        print(maze)
 
-        # creates a maze with walls only
-        maze = []
-        for row in range(self.y):
-            row = []
-            for cell in range(self.x):
-                row.append('0')
-            maze.append(row)
+    def place_start(self, maze):
+        y = randint(0, self.y-1)
+        x = randint(0, self.x-1)
+        maze[y][x] = 8
+        return maze
 
-        # maze = np.array([[1,2,3],
-        #                  [4,5,6],
-        #                  [7,8,9]])
+    def place_end(self, maze):
+        y = randint(0, self.y-1)
+        x = randint(0, self.x-1)
+        if self.check_for(maze, (y,x), 0):
+            maze[y][x] = 3
+            return maze
 
-        # saves the wall only maze as np.array
-        self.file = np.array(maze, dtype=int)
+    def place_wall(self, maze):
+        y = randint(0, self.y-1)
+        x = randint(0, self.x-1)
+        if self.check_for(maze, (y,x), 0):
+            maze[y][x] = 1
+            return maze
 
-        # replaces wall with vacant cells if possible
-        for y, row in enumerate(self.file):
-            for x, cell in enumerate(row):
-                print(f"cell: {cell} at ({y}, {x})")
-                available_cells = 0
-                unavailable_cells = 0
+    def check_for(self, maze, cell, value):
+        if maze[cell[0]][cell[1]] == value:
+            return True
 
-                # gets the value of cell's neighbors
-                for dir in self.directions:
-                    neighbor_row = y + dir[0]
-                    neighbor_col = x + dir[1]
 
-                    # checks bounds
-                    if 0 <= neighbor_row < self.file.shape[0] and 0 <= neighbor_col < self.file.shape[1]:
-                        neighbor = self.file[neighbor_row, neighbor_col]
-                        print(f"Neighbor at ({neighbor_row}, {neighbor_col}): {neighbor}")
-                        if neighbor == 0:
-                            available_cells += 1
-                        if neighbor == 1:
-                            unavailable_cells += 1
 
-                print(f"Available cells: {available_cells}")
-                print(f"Unavailable cells: {unavailable_cells}")
-                # Replace cell if conditions are met
-                if available_cells >= 2 and 1 >= unavailable_cells:
-                    self.file[y, x] = 1
-                    print("cell was replaced with wall")
-                print("\n")
-
-        np.save("temp_maze.npy", self.file)
-        print(self.file)
 
 
 if __name__ == "__main__":
-    generator = Maze_generator((5,5))
+    generator = Maze_generator((3,3))
     generator.create_maze()
 
