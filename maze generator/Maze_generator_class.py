@@ -16,6 +16,7 @@ class Maze_generator:
         flood_fill = FloodFill(maze)
         while flood_fill.can_be_solved:
             self.place_wall(maze)
+            print("check")
             flood_fill.flood(True)
         print(maze)
 
