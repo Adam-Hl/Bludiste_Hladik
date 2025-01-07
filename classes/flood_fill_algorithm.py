@@ -10,7 +10,6 @@ class FloodFill:
         self.finish = (np.where(self.maze == 3)[0],np.where(self.maze == 3)[1])
         self.directions = [(1, 0), (0, -1), (-1, 0), (0, 1)]
         self.transformed = self.maze_transform()
-        self.can_be_solved = True
 
     def maze_transform(self):
         # replaces all 1 with inf. and 8,3 with 0
@@ -30,7 +29,7 @@ class FloodFill:
         values = [int(x) for x in list if x != np.inf]
         return values
 
-    def flood(self):
+    def flood(self, solver):
         # creates queue and adds finish to it
         queue = deque([self.finish])
         # replaces finish with 1
@@ -54,8 +53,16 @@ class FloodFill:
                         # add the new position to the queue for further exploration in next iteration
                         queue.append((new_y, new_x))
 
-                        # sets can_be_solved to true if the maze can be solved
-                        if (new_y, new_x) == self.start:
-                            self.can_be_solved = True
+                        # return true if the maze can be solved
+                        if solver:
+                            if (new_y, new_x) == self.start:
+                                return True
+        if solver:
+            return False
 
-            self.can_be_solved = False
+
+if __name__ == "__main__":
+    flood_fill = FloodFill(np.array([[1, 8, 0],
+                                     [3, 1, 1],
+                                     [1, 0, 0]]))
+    print(flood_fill.flood(True))
