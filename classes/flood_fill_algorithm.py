@@ -30,7 +30,7 @@ class FloodFill:
         values = [int(x) for x in list if x != np.inf]
         return values
 
-    def flood(self, solver):
+    def flood(self):
         # creates queue and adds finish to it
         queue = deque([self.finish])
         # replaces finish with 1

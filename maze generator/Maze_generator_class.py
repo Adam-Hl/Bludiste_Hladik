@@ -15,9 +15,9 @@ class Maze_generator:
         maze = self.place_end(maze)
         flood_fill = FloodFill(maze)
         while flood_fill.can_be_solved:
-            self.place_wall(maze)
+            maze = self.place_wall(maze)
             print("check")
-            flood_fill.flood(True)
+            flood_fill.flood()
         print(maze)
 
     def place_start(self, maze):
